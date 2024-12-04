@@ -1,14 +1,13 @@
 //
-//  File.swift
-//  
+//  EasyNetError.swift
 //
-//  Created by Rezaul Islam on 30/6/24.
+//  Created by Rezaul Islam on 4/12/24.
 //
 
 import Foundation
-
-enum HTTPMethods : String{
+enum EasyNetMethod : String{
     case get = "GET"
     case post = "POST"
     case put = "PUT"
+    case delete = "DELETE"
 }
