@@ -1,6 +1,5 @@
 //
 //  EasyNet.swift
-//
 //  Created by Rezaul Islam on 4/12/24.
 //
 
@@ -8,6 +7,7 @@ import Foundation
 import AVFoundation
 import UIKit
 import Combine
+
 
 public class EasyNet{
     // Create a PassthroughSubject to broadcast status updates
@@ -21,7 +21,7 @@ public class EasyNet{
         self.token = token ?? ""
     }
     
-    
+
     public func fetchData<T : Codable>(endPoint : String, responseType : T.Type, extraHeaders : [String : String]? = nil) -> AnyPublisher<T, Error>{
         guard var request = createRequest(withEndPoint: endPoint, httpMethod: .get) else {
             return Fail(error: EasyNetError.invalidURL).eraseToAnyPublisher()
