@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 
-public class EasyNet{
+public class EasyNet : EasyNetProtocol {
     // Create a PassthroughSubject to broadcast status updates
     public var unauthorizedSubject = PassthroughSubject<Void, Never>()
     
@@ -19,6 +19,10 @@ public class EasyNet{
     public init(baseUrl : String, token : String? = "") {
         self.baseUrl = baseUrl
         self.token = token ?? ""
+    }
+    
+    public func setToken(_ token: String) {
+        self.token = token
     }
     
 
