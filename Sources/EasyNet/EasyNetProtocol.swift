@@ -12,6 +12,8 @@ import UIKit
 public protocol EasyNetProtocol {
     var unauthorizedSubject: PassthroughSubject<Void, Never> { get }
     
+    func setToken(_ token: String)
+    
     func fetchData<T: Codable>(endPoint: String, responseType: T.Type, extraHeaders: [String: String]?) -> AnyPublisher<T, Error>
     
     func postData<T: Codable, R: Codable>(endPoint: String, requestBody: R?, responseType: T.Type, extraHeaders: [String: String]?) -> AnyPublisher<T, Error>

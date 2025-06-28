@@ -21,6 +21,10 @@ public class EasyNet : EasyNetProtocol {
         self.token = token ?? ""
     }
     
+    public func setToken(_ token: String) {
+        self.token = token
+    }
+    
 
     public func fetchData<T : Codable>(endPoint : String, responseType : T.Type, extraHeaders : [String : String]? = nil) -> AnyPublisher<T, Error>{
         guard var request = createRequest(withEndPoint: endPoint, httpMethod: .get) else {
