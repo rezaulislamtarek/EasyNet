@@ -132,7 +132,6 @@ public class EasyNet : EasyNetProtocol {
         if let extraHeader = extraHeaders {
             headers.merge(extraHeader) { _, new in new }
         }
-        Add enable debugLogging functionality and implement setHeaders function
         headers["Content-Type"] = "application/json"
         headers["Accept"] = "application/json"
         headers["Authorization"] = token
