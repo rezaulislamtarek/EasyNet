@@ -157,6 +157,12 @@ public class EasyNet : EasyNetProtocol {
                 } else if httpResponse.statusCode == 422 {
                     throw EasyNetError.validationError(data)
                 } else if httpResponse.statusCode == 400 {
+                    // 👇 LOG the raw body data here
+                           if let bodyString = String(data: data, encoding: .utf8) {
+                               print("🔴 Body parse error. Server response body:\n\(bodyString)")
+                           } else {
+                               print("🔴 Body parse error. Could not decode server response body.")
+                           }
                     throw EasyNetError.bodyPerseError
                 } else {
                     throw EasyNetError.unknown
