@@ -15,17 +15,23 @@ public class EasyNet : EasyNetProtocol {
     
     private let baseUrl : String
     private var token : String
+    private var headers: [String: String] = [:]
+    private var enableDebugLogging: Bool = false
     
-    public init(baseUrl : String, token : String? = "") {
+    public init(baseUrl : String, token : String? = "", enableDebugLogging: Bool = false) {
         self.baseUrl = baseUrl
         self.token = token ?? ""
+        self.enableDebugLogging = enableDebugLogging
     }
     
     public func setToken(_ token: String) {
         self.token = token
     }
     
-
+    public func setHeaders(headers: [String : String]) {
+        self.headers.merge(headers) { _, new in new }
+    }
+    
     public func fetchData<T : Codable>(endPoint : String, responseType : T.Type, extraHeaders : [String : String]? = nil) -> AnyPublisher<T, Error>{
         guard var request = createRequest(withEndPoint: endPoint, httpMethod: .get) else {
             return Fail(error: EasyNetError.invalidURL).eraseToAnyPublisher()
@@ -121,12 +127,12 @@ public class EasyNet : EasyNetProtocol {
     }
     
     private func getHeaders(_ extraHeaders : [String : String]? = nil) -> [String: String] {
-        var headers: [String: String] = [:]
+        
         
         if let extraHeader = extraHeaders {
             headers.merge(extraHeader) { _, new in new }
         }
-        
+        Add enable debugLogging functionality and implement setHeaders function
         headers["Content-Type"] = "application/json"
         headers["Accept"] = "application/json"
         headers["Authorization"] = token
@@ -157,12 +163,14 @@ public class EasyNet : EasyNetProtocol {
                 } else if httpResponse.statusCode == 422 {
                     throw EasyNetError.validationError(data)
                 } else if httpResponse.statusCode == 400 {
-                    // 👇 LOG the raw body data here
-                           if let bodyString = String(data: data, encoding: .utf8) {
-                               print("🔴 Body parse error. Server response body:\n\(bodyString)")
-                           } else {
-                               print("🔴 Body parse error. Could not decode server response body.")
-                           }
+                    if enableDebugLogging {
+                        // 👇 LOG the raw body data here
+                        if let bodyString = String(data: data, encoding: .utf8) {
+                            print("🔴 Body parse error. Server response body:\n\(bodyString)")
+                        } else {
+                            print("🔴 Body parse error. Could not decode server response body.")
+                        }
+                    }
                     throw EasyNetError.bodyPerseError
                 } else {
                     throw EasyNetError.unknown
