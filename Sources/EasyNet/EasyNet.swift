@@ -161,7 +161,7 @@ public class EasyNet : EasyNetProtocol {
                     return data
                 } else if httpResponse.statusCode == 422 {
                     throw EasyNetError.validationError(data)
-                } else if httpResponse.statusCode == 400 {
+                } else  {
                     if enableDebugLogging {
                         // 👇 LOG the raw body data here
                         if let bodyString = String(data: data, encoding: .utf8) {
@@ -171,8 +171,6 @@ public class EasyNet : EasyNetProtocol {
                         }
                     }
                     throw EasyNetError.bodyPerseError
-                } else {
-                    throw EasyNetError.unknown
                 }
                 
             }
