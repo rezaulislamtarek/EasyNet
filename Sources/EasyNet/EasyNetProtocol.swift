@@ -14,6 +14,8 @@ public protocol EasyNetProtocol {
     
     func setToken(_ token: String)
     
+    func setHeaders(headers : [String : String])
+    
     func fetchData<T: Codable>(endPoint: String, responseType: T.Type, extraHeaders: [String: String]?) -> AnyPublisher<T, Error>
     
     func postData<T: Codable, R: Codable>(endPoint: String, requestBody: R?, responseType: T.Type, extraHeaders: [String: String]?) -> AnyPublisher<T, Error>
