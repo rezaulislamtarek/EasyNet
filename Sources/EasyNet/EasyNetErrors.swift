@@ -16,4 +16,5 @@ public enum EasyNetError : Error{
     case bodyPerseError
     case decodeError(Error)
     case validationError(Data)
+    case badRequest(String?)
 }

@@ -128,7 +128,6 @@ public class EasyNet : EasyNetProtocol {
     
     private func getHeaders(_ extraHeaders : [String : String]? = nil) -> [String: String] {
         
-        
         if let extraHeader = extraHeaders {
             headers.merge(extraHeader) { _, new in new }
         }
@@ -161,16 +160,25 @@ public class EasyNet : EasyNetProtocol {
                     return data
                 } else if httpResponse.statusCode == 422 {
                     throw EasyNetError.validationError(data)
-                } else  {
+                }
+                else if httpResponse.statusCode == 400 {
                     if enableDebugLogging {
                         // 👇 LOG the raw body data here
+                        
                         if let bodyString = String(data: data, encoding: .utf8) {
                             print("🔴 Body parse error. Server response body:\n\(bodyString)")
                         } else {
                             print("🔴 Body parse error. Could not decode server response body.")
                         }
                     }
-                    throw EasyNetError.bodyPerseError
+                    
+                    let badReqModel = try? decoder.decode(BadRequestModel.self, from: data)
+                    
+                    throw EasyNetError.badRequest(badReqModel?.message)
+                }
+                
+                else  {
+                    throw EasyNetError.unknown
                 }
                 
             }
@@ -192,4 +200,8 @@ public class EasyNet : EasyNetProtocol {
         request.httpMethod = httpMethod.rawValue
         return request
     }
+}
+
+struct BadRequestModel : Codable {
+    let message: String?
 }
