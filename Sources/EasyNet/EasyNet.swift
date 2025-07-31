@@ -161,7 +161,7 @@ public class EasyNet : EasyNetProtocol {
                 } else if httpResponse.statusCode == 422 {
                     throw EasyNetError.validationError(data)
                 }
-                else if httpResponse.statusCode == 400 {
+                else /*if httpResponse.statusCode == 400 */{
                     if enableDebugLogging {
                         // 👇 LOG the raw body data here
                         
@@ -177,9 +177,7 @@ public class EasyNet : EasyNetProtocol {
                     throw EasyNetError.badRequest(badReqModel?.message)
                 }
                 
-                else  {
-                    throw EasyNetError.unknown
-                }
+                 
                 
             }
             .decode(type: responseType.self, decoder: decoder)
